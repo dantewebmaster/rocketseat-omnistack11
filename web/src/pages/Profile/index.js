@@ -6,6 +6,8 @@ import api from '../../services/api';
 import Logo from '../../assets/logo.svg';
 import { FiPower, FiTrash2 } from 'react-icons/fi';
 
+import { formatMoney } from '../../utils/formatMoney';
+
 import './styles.css';
 
 export default function Profile() {
@@ -15,22 +17,14 @@ export default function Profile() {
   const history = useHistory();
 
   useEffect(() => {
-    api.get('/profile', {
-      headers: {
-        Authorization: ong.id,
-      }
-    }).then(res => {
+    api.get('/profile').then(res => {
       setIncidents(res.data);
     })
   }, [ong.id]);
 
   async function handleDeleteIncident(id) {
     try {
-      await api.delete(`/incidents/${id}`, {
-        headers: {
-          Authorization: ong.id,
-        },
-      });
+      await api.delete(`/incidents/${id}`);
 
       setIncidents(incidents.filter(incident => incident.id !== id));
     } catch (error) {
@@ -68,12 +62,7 @@ export default function Profile() {
             <p>{incident.description}</p>
 
             <strong>Valor:</strong>
-            <p>
-              {Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }).format(incident.value)}
-            </p>
+            <p>{formatMoney(incident.value)}</p>
 
             <button
               type="button"

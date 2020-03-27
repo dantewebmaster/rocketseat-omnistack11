@@ -8,8 +8,6 @@ import api from '../../services/api';
 import './styles.css';
 
 export default function NewIncident() {
-  const ong = JSON.parse(localStorage.getItem('ong'));
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [value, setValue] = useState('');
@@ -26,11 +24,7 @@ export default function NewIncident() {
     };
 
     try {
-      await api.post('/incidents', payload, {
-        headers: {
-          Authorization: ong.id,
-        },
-      });
+      await api.post('/incidents', payload);
 
       history.push('/profile')
     } catch (error) {
